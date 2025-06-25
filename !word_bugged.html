@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    let palabras='claro, clase, descansar, domingo, jueves, contador, extensible, divertido, gastar, pasa, grupo, cafe, habia, moneda, respeto, despierto, noches, seguro, sonido, madera, decir, pastel, video, suerte, directo, pedazo, viene, contador, trabajo, adios, tiempo, avion, artista, monton, alarma, buena, voto, coito, captura, ninguno, favorito, hola, agua, sueño, onda, vida, hiciste, cuento, para, ciego, opcion, puntos, gratis, menta, puedo, primera, llama, lluvia, desierto, lugar, raro, cabeza, nunca, joven, empanada, empanadas, hora, pero, cerca, hace, viejo, vender, puro, algun, gato, queria, serio, sube, mundo, musica, medio, cual, corte, hasta, quitar, temprano, futuro, meta, diciembre, nombre, verano, construccion, recuerdos, azucar, noche, avatar, mañana, totalmente, nosotros, fuera, diferencia, suwier, contenido, sorpresa, minimo, base, casa, pantalla, aire, cantar, exito, mesa, salida, mama, despues, votar, este, proxima, proximo, todas, sirve, todo, romper, como, doble, mucho, diamante, donde, nivel, bien, arte, persona, serie, lejos, hombre, cielo, amigo, canciones, humo, general, esos, dicen, vivo, economia, ayuda, momento, mismo, solo, entre, queda, pasos, primera, mayor, grados, viendo, cantidad, tienen, dijo, clase, personas, tarea, minutos, verdad, pasar, dolores, compra, estaba, veces, mapa, caro, activo, escuchar, imposible, caballo, cuenta, diferentes, diferente, cambio, epico, apuesta, hecho, gente, luego, risa, demasiado, enero, bajo, mucha, ahora, supercalifragilisticoespialidoso, libre, memes, alguna, bailar, capital, volar, camara, rapido, foto, fotos, pagar, tenia, cara, baile, juego, broma, mirar, pegar, falta, completo, perder, animacion, pato, sala, tecnica, aqui, pais, esas, pluma, basura, teoria, argentina, temporada, probar, alma, recien, puerta, cartas, tomate, talento, panda, contra, gano, mensaje, teclado, complicado, toca, conocer, enero, habitacion, alta, posible, miedo, entonces, examen, mejor, hierro, cuando, codigo, escuchar, premio, siempre, listo, consejo, unico, unica, impuestos, antes, ruido, hilo, hablar, fuente, fuentes, pago, tambien, series, terminar, vista, jugar, martillo, buenas, buena, volvi, vuelta, desarrollo, puente, alerta, alertas, honor, precio, tambien, sacar, saludo, gana, aguante, seguir, opinion, portal, piel, bien, primera, aviso, sacar, descansar, feliz, terapia, jugando, detalles, terrible, hambre, anterior, traje, queda, pesos, quien, igual, atras, tarjeta, horas, idea, linea, resumen, fuera, escribir, cerebro, pedir, rosa, ejemplo, imagen, vemos, autos, falta, suficiente, quimica, frente, caballo, estar, energia, tienes, estrella, sigue, juega, trabajar, horarios, timba, gastar, calle, crear, plan, dragon, peluche, pasado, comer, tema, anda, solo, vamos, llega, literal, realidad, tren, llevar, entrar, regalo, ganas, increible, donar, verde, ventilador, dias, naranja, anuncios, terror, original, falla, final, finales, mentira, menos, comprar, cubo, boca, volumen, partido, aprender, arroz, pibe, plato, cosa, personaje, dolares, pesos, piola, rato, tortuga, monitor, dinero, sale, libro, amiga, presente, agarrar, mensajes, carga, helado, chocolate, numeros, saber, viste, unos, llegar, eres, espacio, estudiar, empezar, normal, preguntar, hacen, juegos, opcional, parte, rojo, unas, servidor, bebida, practica, comida, caminar, descarga, palabras'.split(', ');
+    let letras='abcdefghijklmnñopqrstuvwxyz'.split('');
+    const getPattern=(letter,word)=>word.split('').map(e=>e==letter?e:'_').join('');
+    const matchesPattern=(pattern,word)=>pattern.split('').reduce((value,letter,index)=>value&&(letter=='_'||letter==word[index]),true);
+    function repeat(int,a){
+      let output=[];
+      for(let i=0;i<int;i++){
+        output.push(a);
+      }
+      return output
+    }
+    const size=Number(prompt('¿Cuántas letras tiene?'+` (por cierto, son ${palabras.length} palabras)`));
+    let patron=repeat(size,'_').join('');
+    palabras=palabras.filter(e=>e.length==size);
+    letras=letras.filter(e=>palabras.filter(f=>f.includes(e)).length>0)
+    while(palabras.length>1){
+      const letra=letras.map(e=>{
+        const patterns=palabras.map(palabra=>getPattern(e,palabra));
+        const unique=[...new Set(patterns)];
+        return [e,unique.map(f=>patterns.filter(g=>g==f).length).reduce((value,x)=>value+((x/patterns.length)*Math.log2(patterns.length/x)),0)]
+      }).reduce(([letter1,info1],[letter2,info2])=>info1<info2?[letter2,info2]:[letter1,info1],['',0])[0];
+      const mensaje=prompt(`usa ${letra}. ¿Qué salió?`);
+      if(mensaje.includes('"')){
+        const dummy=mensaje.indexOf('"');
+        patron=mensaje.slice(dummy+1,dummy+1+size);
+      }else patron=repeat(size,'_').join('');
+      letras=letras.filter(e=>e!=letra);
+      palabras=palabras.filter(e=>matchesPattern(patron,e));
+    }
+    if(palabras.length==0)alert('Debe ser una palabra nueva');
+    else(alert(`La palabra es ${palabras[0]}`));
+  </script>
+</body>
+</html>
